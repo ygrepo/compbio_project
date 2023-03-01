@@ -1,7 +1,11 @@
-if (!require("BiocManager", quietly = TRUE))
-  install.packages("BiocManager")
+rm(list = ls())
+# if (!require("BiocManager", quietly = TRUE))
+#   install.packages("BiocManager")
+# 
+# BiocManager::install("TCGAbiolinks")
+# BiocManager::install("SummarizedExperiment")
 
-BiocManager::install("TCGAbiolinks")
+
 
 library(TCGAbiolinks)
 library(SummarizedExperiment)
@@ -23,7 +27,7 @@ for(i in tcga_list){
   query <- GDCquery(project = i,
                     data.category = 'Transcriptome Profiling',
                     data.type = 'Gene Expression Quantification',
-                    workflow.type = 'HTSeq - Counts',
+                    workflow.type = 'STAR - Counts',
                     sample.type = 'Primary Tumor')
   if(is.null(query) != TRUE){
     GDCdownload(query)
