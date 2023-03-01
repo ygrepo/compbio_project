@@ -40,3 +40,4 @@ vignettes/*.pdf
 
 data/*
 scr/.DS_Store
+.DS_Store
