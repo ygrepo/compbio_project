@@ -1,1 +1,1 @@
-# compbio_project
+# Computational Biology Project
