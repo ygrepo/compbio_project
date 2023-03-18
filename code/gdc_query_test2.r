@@ -2,43 +2,50 @@ rm(list = ls())
 
 library(SummarizedExperiment)
 library(TCGAbiolinks)
-library(EPIC)
 setwd("~/github/compbio_project/code")
 
+project = "TCGA-BRCA"
+#sample_type = c("Primary Tumor")
+sample_type = c("Primary Tumor","Solid Tissue Normal")
+
 query.exp <- GDCquery(
-  project = "TCGA-BRCA", 
+  project = project, 
   data.category = "Transcriptome Profiling",
   data.type = "Gene Expression Quantification", 
   workflow.type = "STAR - Counts",
-  sample.type = c("Primary Tumor","Solid Tissue Normal")
+  sample.type = sample_type
 )
 GDCdownload(
   query = query.exp,
   files.per.chunk = 100
 )
 
-brca.exp <- GDCprepare(
+tcga_rda_file = "tcga_brca.rda"
+tcga_exp <- GDCprepare(
   query = query.exp, 
   directory = "GDCdata",
   save = FALSE, 
-  #save.filename = "brcaExp.rda"
+  save.filename = tcga_rda_file
 )
 
-#brca.exp = load(file='brcaExp.rda')
-exprs_data <- as.data.frame(assays(brca.exp)$unstranded)
 
-out <- EPIC(bulk = exprs_data, reference = "TRef")
+exprs_data <- as.data.frame(assays(tcga_exp)$unstranded)
+tcga_rda_file = paste("../data/", "brca_unstranded.rda", sep="")
+#save(exprs_data, file=tcga_rda_file)
+saveRDS(exprs_data, file=tcga_rda_file)
+exprs_data2 <- readRDS(file=tcga_rda_file)
 
-#write.table(exprs_data, file = "brcaExp.txt", quote = FALSE, sep='\t')
+#tcga_rda_file = paste("../data/", "brca_unstranded.csv", sep="")
+#write.table(exprs_data, file = tcga_rda_file, quote = FALSE, sep='\t')
 
 # get subtype information
-infomation.subtype <- TCGAquery_subtype(tumor = "BRCA")
+information.subtype <- TCGAquery_subtype(tumor = "HNSC")
 
 # get clinical data
-information.clinical <- GDCquery_clinic(project = "TCGA-BRCA",type = "clinical") 
+information.clinical <- GDCquery_clinic(project = "TCGA-HNSC",type = "clinical") 
 
 # Which samples are Primary Tumor
-samples.primary.tumour <- brca.exp$barcode[brca.exp$shortLetterCode == "TP"]
+samples.primary.tumour <- tcga_exp$barcode[tcga_exp$shortLetterCode == "TP"]
 
 # which samples are solid tissue normal
-samples.solid.tissue.normal <- brca.exp$barcode[brca.exp$shortLetterCode == "NT"]
+samples.solid.tissue.normal <- tcga_exp$barcode[tcga_exp$shortLetterCode == "TP"]
