@@ -13,34 +13,36 @@ rm(list = ls())
 #remotes::install_github("MarioniLab/DropletUtils")
 
 # load
-#library(MuSiC)
 library(SingleCellExperiment)
 library(DropletUtils)
 
 setwd("~/github/compbio_project/code")
 
 # Then, use the readMM() function to read the MTX file
-path_to_data = "~/github/compbio_project/data/Wu_etal_2021_BRCA_scRNASeq/Wu_etal_2021_BRCA_scRNASeq"
+path_to_data = paste("../data//brca/Wu_etal_2021_BRCA_bulk_sc/", 
+                  "Wu_etal_2021_BRCA_scRNASeq/", 
+                  sep="")
+
 sce <- read10xCounts(path_to_data)
 
-# Set the column names in the metadata to SampleId
-#colnames(sce@colData) <- c("sampleID", "Barcode")
-#colnames(sce) <- colData(sce)$Barcode
-
 # Read in the metadata file as a data frame
-metadata_file = paste("../data/Wu_etal_2021_BRCA_scRNASeq/Wu_etal_2021_BRCA_scRNASeq/", "metadata.csv", sep="")
+metadata_file = paste("../data/brca/Wu_etal_2021_BRCA_bulk_sc/Wu_etal_2021_BRCA_scRNASeq/", 
+                     "metadata.csv", 
+                     sep="")
 metadata <- read.csv(metadata_file, row.names = 1)
 
 # Assign the columns to the colData() of the SingleCellExperiment object
 sce@colData$cellType <- metadata$celltype_major
+ct <- unique(sce$cellType)
+print(ct)
 
-# sce_file = paste("../data/", "wu_etal_sce.rds", sep="")
-# #saveRDS(sce, file=sce_file)
-# sce <- readRDS(sce_file)
-# 
-# ct <- unique(sce$cellType)
-# sce_subset <- sce[, 1:1000]
-#assay(sce_subset, "counts") <- as.matrix(counts(sce_subset))
-# sce_file = paste("../data/", "small_wu_etal_sce.rds", sep="")
-# saveRDS(sce_subset, file=sce_file)
+sce_file = paste("../data/brca/Wu_etal_2021_BRCA_bulk_sc/processed/", 
+                      "sce_major_cell_type.rds", 
+                      sep="")
+saveRDS(sce, file=sce_file)
 
+sce_subset <- sce[, 1:1000]
+sce_file = paste("../data/brca/Wu_etal_2021_BRCA_bulk_sc/processed/", 
+                 "sce_1000_major_cell_type.rds", 
+                 sep="")
+saveRDS(sce_subset, file=sce_file)
