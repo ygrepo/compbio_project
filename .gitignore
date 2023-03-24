@@ -42,3 +42,4 @@ data/*
 scr/.DS_Store
 .DS_Store
 code/GDCdata/
+code/.ipynb_checkpoints/

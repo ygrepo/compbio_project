@@ -24,19 +24,19 @@ source("music/analysis.R")
 
 
 # Then, use the readMM() function to read the MTX file
-#path_to_data = "~/github/compbio_project/data/Wu_etal_2021_BRCA_scRNASeq/tmp"
-#sce <- read10xCounts(path_to_data)
+path_to_data = "~/github/compbio_project/data/Wu_etal_2021_BRCA_scRNASeq/Wu_etal_2021_BRCA_scRNASeq"
+sce <- read10xCounts(path_to_data)
 
 # Set the column names in the metadata to SampleId
 #colnames(sce@colData) <- c("sampleID", "Barcode")
 #colnames(sce) <- colData(sce)$Barcode
 
 # Read in the metadata file as a data frame
-#metadata_file = paste("../data/Wu_etal_2021_BRCA_scRNASeq/", "metadata.csv", sep="")
-#metadata_list <- read.csv(metadata_file, row.names = 1)
+metadata_file = paste("../data/Wu_etal_2021_BRCA_scRNASeq/Wu_etal_2021_BRCA_scRNASeq/", "metadata.csv", sep="")
+metadata_list <- read.csv(metadata_file, row.names = 1)
 
 # Assign the columns to the colData() of the SingleCellExperiment object
-#sce@colData$cellType <- metadata_list$celltype_major
+sce@colData$cellType <- metadata_list$celltype_major
 
 # sce_file = paste("../data/", "wu_etal_sce.rds", sep="")
 # #saveRDS(sce, file=sce_file)
@@ -49,8 +49,7 @@ source("music/analysis.R")
 # saveRDS(sce_subset, file=sce_file)
 sce_file = paste("../data/", "small_wu_etal_sce.rds", sep="")
 sce_subset <- readRDS(file=sce_file)
-
-
+ct <- unique(sce_subset$cellType)
 
 bulk_rna_file = paste("../data/Wu_etal_2021_BRCA_scRNASeq/", 
                       "GSE176078_Wu_etal_2021_bulkRNAseq_raw_counts.txt", sep="")
