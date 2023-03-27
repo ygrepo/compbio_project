@@ -13,13 +13,13 @@ rm(list = ls())
 #remotes::install_github("MarioniLab/DropletUtils")
 
 # load
-library(MuSiC)
+#library(MuSiC)
 library(SingleCellExperiment)
 
 setwd("~/github/compbio_project/code")
-# source("music/utils.R")
-# source("music/construct.R")
-# source("music/analysis.R")
+source("music/utils.R")
+source("music/construct.R")
+source("music/analysis.R")
 
 
 bulk_rna_file = paste("../data/brca/Wu_etal_2021_BRCA_bulk_sc/",
@@ -39,7 +39,7 @@ sce <- readRDS(sce_file)
 ct <- unique(sce$cellType)
 
 
-#debug(music_prop)
+debug(music_prop)
 # Estimate cell type proportions
 prop = music_prop(bulk.mtx = bulk_expr, sc.sce = sce, 
            clusters = 'cellType', 

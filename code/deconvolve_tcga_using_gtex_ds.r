@@ -1,7 +1,5 @@
 rm(list = ls())
 # load
-# library(AnnotationDbi)
-# library(EnsDb.Hsapiens.v79)
 library(MuSiC)
 library(SingleCellExperiment)
 library(dplyr)
@@ -18,49 +16,43 @@ tcga_file = paste("../data/brca/tcga/processed/",
                   sep="")
 exprs <-readRDS(tcga_file)
 #exprs <- exprs[,1:2]
-msg <- paste("Tcga exp. dimensions", dim(exprs), sep=":")
-print(msg)
+print(dim(exprs))
 
-sce_file = paste("../data/brca/Wu_etal_2021_BRCA_bulk_sc/processed/", 
-                 "subset_1_ct_minor.rds", 
+sce_file = paste("../data/brca/gtex/processed", 
+                 "subset_sce.rds", 
                  sep="")
 sce <- readRDS(sce_file)
-msg <- paste("Sce dimensions", dim(sce), sep=":")
-print(msg)
+print(dim(sce))
 
-#sce <- sce[,1:1000]
-ct <- unique(sce$cellType)
-msg <- paste("Cell type", ct, sep=":")
-print(msg)
+ct <- unique(sce$CellType)
+print(ct)
 
+sce_genes <- toupper(rowData(sce)$value)
 tcga_genes <- toupper(rownames(exprs))
 rownames(exprs) <- tcga_genes
-
-sce_genes <- toupper(rownames(sce))
-rownames(sce) <- sce_genes
 
 markers <- intersect(sce_genes, tcga_genes)
 msg <- paste("Markers", length(markers), sep=":")
 print(msg)
-msg <- paste("#Sce genes", length(sce_genes), sep=":")
+msg <- paste("#sce genes", length(sce_genes), sep=":")
 print(msg)
-msg <- paste("#Tcga genes", length(tcga_genes), sep=":")
+msg <- paste("#tcga genes", length(tcga_genes), sep=":")
 print(msg)
 
 
-#debug(music_prop)
+# debug(music_prop)
 # Estimate cell type proportions
-prop = music_prop(bulk.mtx = exprs,
+prop = music_prop(bulk.mtx = exprs, 
                                 markers = markers,
                                 sc.sce = sce, 
-                                clusters = 'cellType', 
-                                samples = 'Barcode',
+                                clusters = 'CellType', 
+                                samples = 'sampleID',
                                 select.ct = ct,
                                 verbose = TRUE)
-prop_file = paste("../data/brca/tcga/processed/Wu/", 
-                  "prop_primary_tumor_unstranded_subset_1_ct_minor.rds", 
+prop_file = paste("../data/brca/tcga/processed/gtex/", 
+                  "prop_primary_tumor_unstranded.rds", 
                   sep="")
-msg <- paste("Saving props to ", prop_file)
+msg = paste("Saving props to ", prop_file, sep="")
 print(msg)
 saveRDS(prop, file=prop_file)
 

@@ -26,7 +26,7 @@ setwd("~/github/compbio_project/code")
 tcga_file = paste("../data/brca/tcga/processed/", 
                   "normal_tissue_unstranded.rds", sep="")
 exprs_data <-readRDS(tcga_file)
-# exprs_data <- exprs_data[,1:25]
+#exprs_data <- exprs_data[,1:25]
 
 # Extract gene IDs from row names of exprs_data
 ensembl.genes <- sub('\\.[0-9]*$', '', rownames(exprs_data))
