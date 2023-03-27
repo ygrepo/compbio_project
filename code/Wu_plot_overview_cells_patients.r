@@ -14,7 +14,6 @@ setwd("~/github/compbio_project/code")
 
 sce_file = paste("../data/brca/Wu_etal_2021_BRCA_bulk_sc/processed/", 
                  "sce.rds", 
-#                 "subset_1_ct_minor.rds", 
                  sep="")
 sce <- readRDS(sce_file)
 
@@ -78,9 +77,9 @@ immune.cells <- c("B cells Memory",
                   "Macrophage",
                   "Monocyte",
                   "Other")
-colours <- c("#56B4E9", "#F0E442",  "#009E73",
-  "#E69F00", "#0072B2", "#D55E00", "#CC79A7",
-  "#9C79A7", "#299999","#299949")
+colours <- c("#56B4E9", "#F7DC6F",  "#009E73",
+             "#E74C3C", "#0072B2", "#E67E22", "#641E16",
+             "#A569BD", "#0B5345","#17202A")
 
 temp_colour_pal_2 <- data.frame(celltype = immune.cells, colour = colours)
 # Create the bar plot
@@ -112,7 +111,7 @@ temp_ggplot <- ggplot(data = count_by_individual, aes(x = Individual, y = prop, 
 #  theme_classic()
 
 temp_pdf_function(paste("../figures/", 
-                        "cell_type_proportions_patients.pdf",
+                        "Wu_cell_type_proportions_patients.pdf",
                         sep=""))
 print(temp_ggplot)
 dev.off()

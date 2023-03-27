@@ -22,8 +22,12 @@ msg <- paste("Tcga exp. dimensions", dim(exprs), sep=":")
 print(msg)
 
 sce_file = paste("../data/brca/Wu_etal_2021_BRCA_bulk_sc/processed/", 
-                 "subset_1_ct_minor.rds", 
+                 "subset_CID45171.rds", 
                  sep="")
+msg <- paste("Loading",
+             sce_file,
+             sep=" ")
+print(msg)
 sce <- readRDS(sce_file)
 msg <- paste("Sce dimensions", dim(sce), sep=":")
 print(msg)
@@ -58,7 +62,7 @@ prop = music_prop(bulk.mtx = exprs,
                                 select.ct = ct,
                                 verbose = TRUE)
 prop_file = paste("../data/brca/tcga/processed/Wu/", 
-                  "prop_primary_tumor_unstranded_subset_1_ct_minor.rds", 
+                  "prop_primary_tumor_unstranded_subset_CID45171.rds", 
                   sep="")
 msg <- paste("Saving props to ", prop_file)
 print(msg)
