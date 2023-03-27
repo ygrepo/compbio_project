@@ -112,6 +112,7 @@ temp_ggplot <- ggplot(data = count_by_individual, aes(x = Individual, y = prop, 
 #  theme_classic()
 
 temp_pdf_function(paste("../figures/", 
-                        "cell_type_proportions_patients.pdf"))
+                        "cell_type_proportions_patients.pdf",
+                        sep=""))
 print(temp_ggplot)
 dev.off()
