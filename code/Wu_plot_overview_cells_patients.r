@@ -12,7 +12,7 @@ library(Matrix)
 
 setwd("~/github/compbio_project/code")
 
-sce_file = paste("../data/brca/Wu_etal_2021_BRCA_bulk_sc/processed/", 
+sce_file = paste("../data/brca/Wu_etal_2021_BRCA_bulk_sc/processed/ct_minor/", 
                  "sce.rds", 
                  sep="")
 sce <- readRDS(sce_file)
@@ -74,12 +74,10 @@ immune.cells <- c("B cells Memory",
                   "NK cells",
                   "Cycling T-cells",
                   "NKT cells",
-                  "Macrophage",
-                  "Monocyte",
-                  "Other")
+                  "Monocyte")
 colours <- c("#56B4E9", "#F7DC6F",  "#009E73",
-             "#E74C3C", "#0072B2", "#E67E22", "#641E16",
-             "#A569BD", "#0B5345","#17202A")
+             "#E74C3C", "#0072B2", "#E67E22", 
+             "#A569BD", "#0B5345")
 
 temp_colour_pal_2 <- data.frame(celltype = immune.cells, colour = colours)
 # Create the bar plot
@@ -110,7 +108,7 @@ temp_ggplot <- ggplot(data = count_by_individual, aes(x = Individual, y = prop, 
   scale_fill_manual(values = as.vector(temp_colour_pal_2$colour)) 
 #  theme_classic()
 
-temp_pdf_function(paste("../figures/", 
+temp_pdf_function(paste("../figures/With_No_Other/", 
                         "Wu_cell_type_proportions_patients.pdf",
                         sep=""))
 print(temp_ggplot)

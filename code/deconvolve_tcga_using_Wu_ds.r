@@ -21,8 +21,8 @@ exprs <-readRDS(tcga_file)
 msg <- paste("Tcga exp. dimensions", dim(exprs), sep=":")
 print(msg)
 
-sce_file = paste("../data/brca/Wu_etal_2021_BRCA_bulk_sc/processed/", 
-                 "subset_CID45171.rds", 
+sce_file = paste("../data/brca/Wu_etal_2021_BRCA_bulk_sc/processed/ct_minor/", 
+                 "subset_CID3586.rds", 
                  sep="")
 msg <- paste("Loading",
              sce_file,
@@ -61,8 +61,8 @@ prop = music_prop(bulk.mtx = exprs,
                                 samples = 'Barcode',
                                 select.ct = ct,
                                 verbose = TRUE)
-prop_file = paste("../data/brca/tcga/processed/Wu/", 
-                  "prop_primary_tumor_unstranded_subset_CID45171.rds", 
+prop_file = paste("../data/brca/tcga/processed/Wu/ct_minor/", 
+                  "prop_primary_tumor_unstranded_subset_CID3586.rds", 
                   sep="")
 msg <- paste("Saving props to ", prop_file)
 print(msg)

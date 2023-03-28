@@ -12,8 +12,8 @@ library(Matrix)
 
 setwd("~/github/compbio_project/code")
 
-prop_file = paste("../data/brca/tcga/processed/Wu/", 
-                  "prop_primary_tumor_unstranded_subset_CID45171.rds", 
+prop_file = paste("../data/brca/tcga/processed/Wu/ct_minor/", 
+                  "prop_primary_tumor_unstranded_subset_CID3586.rds", 
                   sep="")
 prop <- readRDS(file=prop_file)
 head(prop$Est.prop.weighted)
@@ -46,12 +46,24 @@ immune.cells <- c("B cells Memory",
                   "NK cells",
                   "Cycling T-cells",
                   "NKT cells",
-                  "Macrophage",
-                  "Monocyte",
-                  "Other")
+                  "Monocyte")
 colours <- c("#56B4E9", "#F7DC6F",  "#009E73",
-             "#E74C3C", "#0072B2", "#E67E22", "#641E16",
-             "#A569BD", "#0B5345","#17202A")
+             "#E74C3C", "#0072B2", "#E67E22", 
+             "#A569BD", "#0B5345")
+
+# immune.cells <- c("B cells Memory",
+#                   "B cells Naive",
+#                   "T cells CD8+",
+#                   "T cells CD4+",
+#                   "NK cells",
+#                   "Cycling T-cells",
+#                   "NKT cells",
+#                   "Macrophage",
+#                   "Monocyte",
+#                   "Other")
+# colours <- c("#56B4E9", "#F7DC6F",  "#009E73",
+#              "#E74C3C", "#0072B2", "#E67E22", "#641E16",
+#              "#A569BD", "#0B5345","#17202A")
 # colours <- c("#56B4E9", "#F0E442",  "#009E73",
 #              "#E69F00", "#0072B2", "#D55E00", "#CE79A7",
 #              "#9C79A7", "#299999","#299949")
@@ -94,8 +106,8 @@ temp_ggplot <- ggplot(data = sampled_weight_df_long, aes(x = Individual, y = pro
   scale_fill_manual(values = as.vector(temp_colour_pal_2$colour)) +
   theme(axis.text.x = element_blank())
 
-temp_pdf_function(paste("../figures/", 
-                        "Tcga_Wu_cell_type_proportions_patients_CID45171.pdf",
+temp_pdf_function(paste("../figures/With_No_Other/", 
+                        "Tcga_Wu_cell_type_proportions_patients_CID3586.pdf",
                         sep=""))
 print(temp_ggplot)
 dev.off()
