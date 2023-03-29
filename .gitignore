@@ -43,3 +43,9 @@ scr/.DS_Store
 .DS_Store
 code/GDCdata/
 code/.ipynb_checkpoints/
+code/GSE156969/*
+code/GSE161529/*
+code/GSE164898/*
+code/GSE33146/*
+code/GSE65194/*
+code/GSE66417/*
