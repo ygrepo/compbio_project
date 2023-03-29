@@ -16,7 +16,8 @@ gse161529 <- getGEO('GSE161529')
 #getGEOSuppFiles("GSE161529")
 gse161529 <- gse161529[[1]]
 pd <- pData(gse161529)
-pd <- pd[pd$`cancer type:ch1` == "Normal",]
+print(unique(pd$`cancer type:ch1`))
+pd <- pd[pd$`cancer type:ch1` != "Normal",]
 # Define paths to the gene, barcode, and mtx files
 
 # Define the directory path
@@ -29,11 +30,15 @@ pd <- pd[pd$`cancer type:ch1` == "Normal",]
 
 path = "./GSE161529/SCP1731/metadata/metadataInfo.txt"
 metadata <- read.table(path, header=TRUE, sep="\t", quote="", comment.char="")
-metadata <- metadata[metadata$donor_id %in% c("Human-WT-A",
+metadata <- metadata[2:nrow(metadata),]
+metadata <- metadata[!(metadata$donor_id %in% c("Human-WT-A",
                                               "Human-WT-B",
                                               "Human-WT-C",
-                                              "Human-WT-D"), ]
+                                              "Human-WT-D")), ]
 print(unique(metadata$donor_id))
+# Remove the numbers from the text column using gsub() and a regular expression
+metadata$biosample_id <- gsub("^\\d+\\.\\s+", "", metadata$biosample_id)
+metadata$cell_subtypes <- gsub("^\\d+\\.\\s+", "", metadata$cell_subtypes)
 print(unique(metadata$biosample_id))
 print(unique(metadata$cell_subtypes))
 metadata$barcode <- gsub(".*_", "", gsub(".*-", "", metadata$NAME))
@@ -50,7 +55,9 @@ gene_files <- c("./GSE161529/GSE161529_features.tsv")
 barcode_l = list()
 gene_symbol_l = list()
 biosample_id_l = list()
+cell_types_l = list()
 cell_subtypes_l = list()
+donor_l = list()
 for (i in (1:length(comb_files$bc))) {
   print(i)
   # Read the files using read10X
@@ -80,24 +87,28 @@ for (i in (1:length(comb_files$bc))) {
   m_list <- c(m_list,m)
   s_metadata <- metadata[metadata$barcode %in% int_barcodes, ]
   biosample_id_l <- c(biosample_id_l, s_metadata$s_metadata)
-  print(paste0("Length biosample_id:", length(s_metadata$biosample_id)))
+  donor_l <- c(donor_l, s_metadata$donor_id)
+  print(paste0("Length cell types:", length(s_metadata$biosample_id)))
+  cell_types_l <- c(cell_types_l, s_metadata$biosample_id)
+  print(paste0("Length cell subtypes:", length(s_metadata$cell_subtypes)))
   cell_subtypes_l <- c(cell_subtypes_l, s_metadata$cell_subtypes)
-  print(paste0("Length cell_subtypes:", length(s_metadata$cell_subtypes)))
 }
 
 m <- do.call(cbind2, m_list)
 # Create a SingleCellExperiment object with m
 sce <- SingleCellExperiment(list(counts=m))
 rowData(sce)$gene <-   do.call(cbind, gene_symbol_l)
+sce$Individual <- do.call(cbind, donor_l)
 sce$sampleID <- do.call(cbind, barcode_l)
-sce$cellType <- do.call(cbind, cell_subtypes_l)
+sce$cell_types <- do.call(cbind, cell_types_l)
+sce$cell_subtypes <- do.call(cbind, cell_subtypes_l)
 sce$biosample_id <- do.call(cbind, biosample_id_l)
 # Print the resulting SingleCellExperiment object
 print(sce)
 
 
 tcga_file = paste("../data/brca/tcga/processed/", 
-                  "converted_genes_normal_tissue_unstranded_exp_data.rds", 
+                  "converted_genes_primary_tumor_unstranded_exp_data.rds", 
                   sep="")
 exprs <-readRDS(tcga_file)
 
@@ -112,10 +123,10 @@ print(msg)
 msg <- paste("#tcga genes", length(tcga_genes), sep=":")
 print(msg)
 
-print(unique(sce$cellType))
+print(unique(sce$cell_types))
 
 sce_file = paste("../data/brca/GSE161529/processed/", 
-                 "normal_sce.rds", 
+                 "tumor_sce.rds", 
                  sep="")
 saveRDS(sce, file=sce_file)
 

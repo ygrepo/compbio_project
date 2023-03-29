@@ -14,7 +14,7 @@ setwd("~/github/compbio_project/code")
 # source("music/analysis.R")
 
 tcga_file = paste("../data/brca/tcga/processed/", 
-                  "converted_genes_normal_tissue_unstranded_exp_data.rds", 
+                  "converted_genes_primary_tumor_unstranded_exp_data.rds", 
                   sep="")
 exprs <-readRDS(tcga_file)
 #exprs <- exprs[,1:2]
@@ -22,7 +22,7 @@ msg <- paste("Tcga exp. dimensions", dim(exprs), sep=":")
 print(msg)
 
 sce_file = paste("../data/brca/GSE161529/processed/", 
-                 "normal_sce.rds", 
+                 "tumor_sce.rds", 
                  sep="")
 msg <- paste("Loading",
              sce_file,
@@ -33,8 +33,8 @@ msg <- paste("Sce dimensions", dim(sce), sep=":")
 print(msg)
 
 #sce <- sce[,1:1000]
-ct <- unique(sce$cellType)
-msg <- paste("Cell type", ct, sep=":")
+ct <- unique(sce$cell_subtypes)
+msg <- paste("Cell types", ct, sep=":")
 print(msg)
 
 tcga_genes <- toupper(rownames(exprs))
@@ -57,12 +57,12 @@ print(msg)
 prop = music_prop(bulk.mtx = exprs,
                                 markers = markers,
                                 sc.sce = sce, 
-                                clusters = 'cellType', 
+                                clusters = 'cell_subtypes', 
                                 samples = 'sampleID',
                                 select.ct = ct,
                                 verbose = TRUE)
 prop_file = paste("../data/brca/tcga/processed/GSE161529/",
-                  "prop_normal_tissue_unstranded.rds",
+                  "prop_cell_subtype_tumor_tissue_unstranded.rds",
                   sep="")
 msg <- paste("Saving props to ", prop_file)
 print(msg)
