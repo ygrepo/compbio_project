@@ -33,7 +33,7 @@ msg <- paste("Sce dimensions", dim(sce), sep=":")
 print(msg)
 
 #sce <- sce[,1:1000]
-ct <- unique(sce$cell_subtypes)
+ct <- unique(sce$cell_types)
 msg <- paste("Cell types", ct, sep=":")
 print(msg)
 
@@ -57,12 +57,12 @@ print(msg)
 prop = music_prop(bulk.mtx = exprs,
                                 markers = markers,
                                 sc.sce = sce, 
-                                clusters = 'cell_subtypes', 
+                                clusters = 'cell_types', 
                                 samples = 'sampleID',
                                 select.ct = ct,
                                 verbose = TRUE)
 prop_file = paste("../data/brca/tcga/processed/GSE161529/",
-                  "prop_cell_subtype_tumor_tissue_unstranded.rds",
+                  "prop_cell_type_tumor_tissue_unstranded.rds",
                   sep="")
 msg <- paste("Saving props to ", prop_file)
 print(msg)

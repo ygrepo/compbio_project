@@ -13,7 +13,7 @@ library(Matrix)
 setwd("~/github/compbio_project/code")
 
 prop_file = paste("../data/brca/tcga/processed/GSE161529/",
-                  "prop_ct_normal_tissue_unstranded.rds",
+                  "prop_cell_type_tumor_tissue_unstranded.rds",
                   sep="")
 prop <- readRDS(file=prop_file)
 head(prop$Est.prop.weighted)
@@ -82,7 +82,7 @@ temp_ggplot <- ggplot(data = sampled_weight_df_long, aes(x = Individual, y = pro
   theme(axis.text.x = element_blank())
 
 temp_pdf_function(paste("../figures/GS161529/", 
-                        "Tcga_gse161529_ct_normal_proportions_patients.pdf",
+                        "Tcga_gse161529_cell_type_tumor_proportions_patients.pdf",
                         sep=""))
 print(temp_ggplot)
 dev.off()
