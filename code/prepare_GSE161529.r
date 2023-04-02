@@ -9,6 +9,7 @@ library(purrr)
 library(edgeR)
 library(SingleCellExperiment)
 library(Matrix)
+library(knitr)
 
 setwd("~/github/compbio_project/code")
 
@@ -41,6 +42,19 @@ metadata$biosample_id <- gsub("^\\d+\\.\\s+", "", metadata$biosample_id)
 metadata$cell_subtypes <- gsub("^\\d+\\.\\s+", "", metadata$cell_subtypes)
 print(unique(metadata$biosample_id))
 print(unique(metadata$cell_subtypes))
+
+metadata_output <- metadata %>%
+  dplyr::group_by(biosample_id, cell_subtypes) %>%
+  dplyr::select(biosample_id, cell_subtypes) %>%
+  dplyr::distinct() %>%
+  dplyr::arrange(biosample_id, cell_subtypes) %>%
+  kable(format = "html",
+        col.names = c("Major Type", "Minor Type"),
+        caption="GSE161529 Cell Type Hierarchy")
+
+writeLines(metadata_output, "../figures/GSE161529/GSE161529_cell_hierarchy.html")
+
+
 metadata$barcode <- gsub(".*_", "", gsub(".*-", "", metadata$NAME))
 m_barcodes <- unique(metadata$barcode)
 print(length(m_barcodes))

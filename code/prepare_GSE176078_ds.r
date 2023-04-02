@@ -15,6 +15,7 @@ rm(list = ls())
 # load
 library(SingleCellExperiment)
 library(DropletUtils)
+library(knitr)
 
 setwd("~/github/compbio_project/code")
 
@@ -35,7 +36,19 @@ setwd("~/github/compbio_project/code")
 # print(unique(metadata$celltype_subset))
 # print(unique(metadata$celltype_minor))
 # print(unique(metadata$celltype_major))
- 
+# 
+# metadata_output <- metadata %>%
+#   dplyr::group_by(celltype_major, celltype_minor) %>%
+#   dplyr::select(celltype_major, celltype_minor) %>%
+#   dplyr::distinct() %>%
+#   dplyr::arrange(celltype_major, celltype_minor) %>%
+#   kable(format = "html", 
+#         col.names = c("Major Type", "Minor Type"),
+#         caption="GSE17608 Cell Type Hierarchy")
+# 
+# writeLines(metadata_output, "../figures/GSE176078/GSE176078_cell_hierarchy.html")
+
+
 # Assign the columns to the colData() of the SingleCellExperiment object
 #sce@colData$cellType <- metadata$celltype_minor
 # #sce@colData$cellType <- metadata$celltype_subset
