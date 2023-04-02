@@ -9,6 +9,7 @@ library(SingleCellExperiment)
 library(ggplot2)
 #library(easyGgplot2)
 library(Matrix)
+library(tibble)
 
 setwd("~/github/compbio_project/code")
 
@@ -81,8 +82,38 @@ temp_ggplot <- ggplot(data = sampled_weight_df_long, aes(x = Individual, y = pro
   scale_fill_manual(values = as.vector(temp_colour_pal_2$colour)) +
   theme(axis.text.x = element_blank())
 
-temp_pdf_function(paste("../figures/GS161529/", 
+temp_pdf_function(paste("../figures/GSE161529/", 
                         "Tcga_gse161529_cell_type_tumor_proportions_patients.pdf",
                         sep=""))
 print(temp_ggplot)
 dev.off()
+
+df <- as_tibble(weight_df_long)
+
+# Remove rows with 0 values in the 'prop' column
+df <- subset(df, prop != 0)
+# Create violin plot
+temp_ggplot <- ggplot(df, aes(x = cellType, y = -log(prop), fill = cellType)) +
+  geom_violin() +
+  stat_summary(fun = mean, geom = "point", size = 3, shape = 21, fill = "white") + # Add mean points
+  theme_classic() +
+  theme(plot.background = element_rect(size = 1.5, color = "black"),
+        panel.background = element_rect(size = 1.5, color = "black"),
+        axis.title.x = element_text(size = 12),
+        axis.title.y = element_text(size = 12),
+        axis.text.x = element_text(face = 'bold'),
+        axis.text.y = element_text(size = 14, face = 'bold'),
+        legend.title = element_text(size = 12),
+        legend.text = element_text(size = 12),
+        legend.key.size = unit(0.75, "cm"),
+        legend.position = "bottom",
+        plot.title = element_text(hjust = 0.5)) +
+  labs(x = "Cell Type", y = "-Log(Cell Proportion)", fill = "Cell Type")
+
+temp_pdf_function(paste("../figures/GSE161529/", 
+                        "Tcga_gse161529_cell_type_tumor_proportions_patients_violin.pdf",
+                        sep=""))
+
+print(temp_ggplot)
+dev.off()
+
