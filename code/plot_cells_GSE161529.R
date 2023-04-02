@@ -72,7 +72,7 @@ temp_pdf_function <-
     )
   }
 temp_pdf_function(paste("../figures/GSE161529/", 
-                        "mean_expression_cell_type.pdf",
+                        "GSE161529_tumor_mean_expression_cell_type.pdf",
                         sep=""))
 print(temp_ggplot)
 dev.off()
