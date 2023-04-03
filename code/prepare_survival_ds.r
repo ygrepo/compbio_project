@@ -27,8 +27,8 @@ tcga_clin_patients <- unique(clinical$patientId)
 print(length(tcga_clin_patients))
 #grep("^TCGA-A7-A13D", tcga_clin_patients, value = TRUE)
 
-prop_file = paste("../data/brca/tcga/processed/GSE176078/ct_minor/", 
-                  "prop_primary_tumor_unstranded_subset_CID3586.rds", 
+prop_file = paste("../data/brca/tcga/processed/GSE161529/", 
+                  "prop_cell_type_tumor_tissue_unstranded.rds", 
                   sep="")
 prop <- readRDS(file=prop_file)
 weights <- prop$Est.prop.weighted
@@ -56,8 +56,8 @@ unlisted <- unlist(rownames(weights))
 unlisted[duplicated(unlisted)]
 weights <- weights[!(rownames(weights) %in% unlisted[duplicated(unlisted)]), ]
 
-prop_file = paste("../data/brca/tcga/processed/GSE176078/ct_minor/", 
-                  "weights_cell_type_tumor_CID3586.csv", 
+prop_file = paste("../data/brca/tcga/processed/GSE161529/", 
+                  "weights_cell_type_tumor.csv", 
                   sep="")
 write.table(weights,
             file=prop_file,
@@ -74,8 +74,8 @@ clinical_tmp <- clinical_tmp %>% select(patientId, SUBTYPE,
                                         DFS_MONTHS, 
                                         DFS_STATUS)
 clinical_tmp$patientId <- vapply(clinical_tmp$patientId, paste, collapse = ", ", character(1L))
-clin_file = paste("../data/brca/tcga/processed/GSE176078/ct_minor/", 
-                  "clinical_cell_type_tumor_CID3586.csv", 
+clin_file = paste("../data/brca/tcga/processed/GSE161529/", 
+                  "clinical_cell_type_tumor.csv", 
                   sep="")
 write.table(clinical_tmp,
             file=clin_file,
