@@ -36,7 +36,7 @@ setwd("~/github/compbio_project/code")
 # print(unique(metadata$celltype_subset))
 # print(unique(metadata$celltype_minor))
 # print(unique(metadata$celltype_major))
-# 
+
 # metadata_output <- metadata %>%
 #   dplyr::group_by(celltype_major, celltype_minor) %>%
 #   dplyr::select(celltype_major, celltype_minor) %>%

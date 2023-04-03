@@ -10,6 +10,7 @@ rm(list = ls())
 library(dplyr)
 library(tibble)
 library(Hmisc)
+library(knitr)
 
 setwd("~/github/compbio_project/code")
 
@@ -20,16 +21,17 @@ tumor_clinical <- readRDS(file=tcga_file)
 
 tumor_clinical$AGE <- as.numeric(as.character(tumor_clinical$AGE))  # Convert one variable to numeric
 
-summary(tumor_clinical$AGE)
-
 colnames(tumor_clinical)
 
-Hmisc::describe(tumor_clinical$AGE)
+summary(tumor_clinical$AGE)
+
 Hmisc::describe(tumor_clinical$RACE)
 Hmisc::describe(tumor_clinical$ETHNICITY)
 Hmisc::describe(tumor_clinical$CANCER_TYPE)
 Hmisc::describe(tumor_clinical$SUBTYPE)
 Hmisc::describe(tumor_clinical$TUMOR_TYPE)
+Hmisc::describe(tumor_clinical$AJCC_PATHOLOGIC_TUMOR_STAGE)
+Hmisc::describe(tumor_clinical$RADIATION_THERAPY)
 Hmisc::describe(tumor_clinical$RAGNUM_HYPOXIA_SCORE)
 Hmisc::describe(tumor_clinical$WINTER_HYPOXIA_SCORE)
 
