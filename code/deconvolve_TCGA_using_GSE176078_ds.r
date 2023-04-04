@@ -61,7 +61,7 @@ prop = music_prop(bulk.mtx = exprs,
                                 samples = 'Barcode',
                                 select.ct = ct,
                                 verbose = TRUE)
-prop_file = paste("../data/brca/tcga/processed/Wu/ct_minor/", 
+prop_file = paste("../data/brca/tcga/processed/GSE176078/ct_minor/", 
                   "prop_primary_tumor_unstranded_subset_CID3586.rds", 
                   sep="")
 msg <- paste("Saving props to ", prop_file)

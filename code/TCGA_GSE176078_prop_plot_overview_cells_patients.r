@@ -12,7 +12,7 @@ library(Matrix)
 
 setwd("~/github/compbio_project/code")
 
-prop_file = paste("../data/brca/tcga/processed/Wu/ct_minor/", 
+prop_file = paste("../data/brca/tcga/processed/GSE176078/ct_minor/", 
                   "prop_primary_tumor_unstranded_subset_CID3586.rds", 
                   sep="")
 prop <- readRDS(file=prop_file)
@@ -135,7 +135,7 @@ temp_ggplot <- ggplot(df, aes(x = cellType, y = -log(prop), fill = cellType)) +
         plot.title = element_text(hjust = 0.5)) +
   labs(x = "Cell Type", y = "-Log(Cell Proportion)", fill = "Cell Type")
 
-temp_pdf_function(paste("../figures/Wu/With_No_Other/", 
+temp_pdf_function(paste("../figures/GSE176078/With_No_Other/", 
                         "Tcga_Wu_cell_type_proportions_patients_CID3586_violin.pdf",
                         sep=""))
 print(temp_ggplot)
