@@ -8,8 +8,8 @@ library(anndata)
 setwd("~/github/compbio_project/code")
 
 
-path = paste("../data/brca/tcga/processed/GSE176078/ct_minor/", 
-             "prop_primary_tumor_unstranded_subset_CID3586.rds", 
+path = paste("../data/brca/tcga/processed/GSE161529/", 
+             "prop_cell_type_tumor_tissue_unstranded.rds", 
              sep="")
 cell_estimation<- readRDS(path)
 head(cell_estimation)
@@ -58,8 +58,8 @@ dim(gene_sce)
 #              sep="")
 # write_h5ad(AnnData(X=gene_sce), path)
 
-path = paste("../data/brca/tcga/processed/GSE176078/ct_minor/", 
-             "genes_prop_cells_primary_tumor_unstranded_subset_CID3586.csv", 
+path = paste("../data/brca/tcga/processed/GSE161529/", 
+             "genes_prop_cells_primary_tumor_unstranded.csv", 
              sep="")
 write.table(gene_sce, file=path, sep=",")
 #write_h5ad(AnnData(X=gene_sce), path)
