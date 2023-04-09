@@ -28,14 +28,14 @@ setwd("~/github/compbio_project/code")
 
 
 # Read in the metadata file as a data frame
-# metadata_file = paste("../data/brca/Wu_etal_2021_BRCA_bulk_sc/Wu_etal_2021_BRCA_scRNASeq/",
-#                       "metadata.csv",
-#                       sep="")
-# metadata <- read.csv(metadata_file, row.names = 1)
-# print(unique(metadata$subtype))
-# print(unique(metadata$celltype_subset))
-# print(unique(metadata$celltype_minor))
-# print(unique(metadata$celltype_major))
+metadata_file = paste("../data/brca/Wu_etal_2021_BRCA_bulk_sc/Wu_etal_2021_BRCA_scRNASeq/",
+                      "metadata.csv",
+                      sep="")
+metadata <- read.csv(metadata_file, row.names = 1)
+print(unique(metadata$subtype))
+print(unique(metadata$celltype_subset))
+print(unique(metadata$celltype_minor))
+print(unique(metadata$celltype_major))
 
 # metadata_output <- metadata %>%
 #   dplyr::group_by(celltype_major, celltype_minor) %>%

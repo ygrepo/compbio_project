@@ -5,8 +5,8 @@ library(TCGAbiolinks)
 setwd("~/github/compbio_project/code")
 
 project = "TCGA-BRCA"
-#sample_type = c("Primary Tumor")
-sample_type = c("Solid Tissue Normal")
+sample_type = c("Primary Tumor")
+#sample_type = c("Solid Tissue Normal")
 #sample_type = c("Primary Tumor","Solid Tissue Normal")
 
 query.exp <- GDCquery(

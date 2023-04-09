@@ -16,7 +16,7 @@ rm(list = ls())
 #install.packages("dplyr")   
 
 # load
-library(AnnotationDbi)
+#library(AnnotationDbi)
 library(EnsDb.Hsapiens.v79)
 library(SingleCellExperiment)
 library(dplyr)
