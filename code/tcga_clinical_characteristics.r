@@ -24,6 +24,7 @@ tumor_clinical$AGE <- as.numeric(as.character(tumor_clinical$AGE))  # Convert on
 colnames(tumor_clinical)
 
 summary(tumor_clinical$AGE)
+sd(tumor_clinical$AGE)
 
 Hmisc::describe(tumor_clinical$RACE)
 Hmisc::describe(tumor_clinical$ETHNICITY)
@@ -46,5 +47,12 @@ unique(normal_clinical$vital_status)
 unique(normal_clinical$days_to_diagnosis)
 
 Hmisc::describe(normal_clinical$age_at_index)
+
+age_at_index <- normal_clinical %>% 
+  as.data.frame() %>% 
+  select(age_at_index)
+summary(age_at_index)
+sd(normal_clinical$age_at_index)
+
 Hmisc::describe(normal_clinical$race)
 Hmisc::describe(normal_clinical$ethnicity)
