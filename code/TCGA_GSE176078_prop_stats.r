@@ -3,17 +3,17 @@ rm(list = ls())
 # The easiest way to get ggplot2 is to install the whole tidyverse:
 #install.packages("tidyverse")
 
+
 # load
 library(SingleCellExperiment)
 library(ggplot2)
 #library(easyGgplot2)
 library(Matrix)
-library(tibble)
 
 setwd("~/github/compbio_project/code")
 
-prop_file = paste("../data/brca/tcga/processed/GSE161529/",
-                  "prop_immune_tumor_tissue_unstranded.rds",
+prop_file = paste("../data/brca/tcga/processed/GSE176078/ct_minor/", 
+                  "prop_primary_tumor_unstranded_subset_CID3586.rds", 
                   sep="")
 prop <- readRDS(file=prop_file)
 head(prop$Est.prop.weighted)
@@ -24,6 +24,35 @@ head(prop$Var.prop)
 weight_df <- as.data.frame(prop$Est.prop.weighted)
 weight_df$Individual <- rownames(weight_df)
 weight_df_long <- tidyr::gather(weight_df, "cellType", "prop", -Individual)
+
+immune.cells <- c("B cells Memory",
+                  "B cells Naive",
+                  "T cells CD8+",
+                  "T cells CD4+",
+                  "NK cells",
+                  "Cycling T-cells",
+                  "NKT cells",
+                  "Monocyte")
+
+immune_proportions <- t(data.frame(
+  patient1 = c(0.1, 0.3, 0.2, 0.15, 0.05, 0.05, 0.03, 0.02),
+  patient2 = c(0.2, 0.2, 0.1, 0.2, 0.05, 0.1, 0.05, 0.1),
+  patient3 = c(0.3, 0.1, 0.05, 0.2, 0.1, 0.05, 0.01, 0.09)
+))
+colnames(immune_proportions) <- immune.cells
+
+
+# Perform k-means clustering on the immune cell proportions
+k <- 2 # number of clusters
+kmeans_result <- kmeans(immune_proportions, centers = k, nstart = 10)
+
+#Compute the immune score for each patient based on the cluster centroids
+cluster_centers <- t(kmeans_result$centers)
+patient_clusters <- kmeans_result$cluster
+immune_scores <- apply(immune_proportions, 2, function(x) {
+  centroid <- cluster_centers[, patient_clusters]
+  sum((x - centroid) ^ 2)
+})
 
 # Get unique individual names and create ID mapping
 individuals <- unique(weight_df_long$Individual)
@@ -39,14 +68,36 @@ sampled_individuals <- sample(unique(weight_df_long$Individual), n)
 # Filter weight_df_long to only include the sampled individuals
 sampled_weight_df_long <- weight_df_long[weight_df_long$Individual %in% sampled_individuals, ]
 
-print(unique(sampled_weight_df_long$cellType))
+immune.cells <- c("B cells Memory",
+                  "B cells Naive",
+                  "T cells CD8+",
+                  "T cells CD4+",
+                  "NK cells",
+                  "Cycling T-cells",
+                  "NKT cells",
+                  "Monocyte")
+colours <- c("#56B4E9", "#F7DC6F",  "#009E73",
+             "#E74C3C", "#0072B2", "#E67E22", 
+             "#A569BD", "#0B5345")
 
-cell.types <- c("T cell","Myeloid cell","Plasma cell")
-cell.types.colors <- c("#E74C3C", "#0072B2", "#E67E22")
-# cell.types <- c("AV","BA","Fibroblast","HS","Immune","Vascular and lymphatic")
-# cell.types.colors <- c("#56B4E9", "#F7DC6F",  "#009E73",
-#                        "#E74C3C", "#0072B2", "#E67E22")
-temp_colour_pal_2 <- data.frame(celltype = cell.types, colour = cell.types.colors)
+# immune.cells <- c("B cells Memory",
+#                   "B cells Naive",
+#                   "T cells CD8+",
+#                   "T cells CD4+",
+#                   "NK cells",
+#                   "Cycling T-cells",
+#                   "NKT cells",
+#                   "Macrophage",
+#                   "Monocyte",
+#                   "Other")
+# colours <- c("#56B4E9", "#F7DC6F",  "#009E73",
+#              "#E74C3C", "#0072B2", "#E67E22", "#641E16",
+#              "#A569BD", "#0B5345","#17202A")
+# colours <- c("#56B4E9", "#F0E442",  "#009E73",
+#              "#E69F00", "#0072B2", "#D55E00", "#CE79A7",
+#              "#9C79A7", "#299999","#299949")
+
+temp_colour_pal_2 <- data.frame(celltype = immune.cells, colour = colours)
 # Create the bar plot
 temp_pdf_function <-
   function(x) {
@@ -55,15 +106,6 @@ temp_pdf_function <-
       width = 12,
       height = 5,
       useDingbats=F
-    )
-  }
-
-temp_png_function <-
-  function(x) {
-    png(
-      file = (x),
-      width = 12,
-      height = 5
     )
   }
 
@@ -93,15 +135,12 @@ temp_ggplot <- ggplot(data = sampled_weight_df_long, aes(x = Individual, y = pro
   scale_fill_manual(values = as.vector(temp_colour_pal_2$colour)) +
   theme(axis.text.x = element_blank())
 
-# temp_pdf_function(paste("../figures/GSE161529/", 
-#                         "Tcga_gse161529_immune_tumor_proportions_patients.pdf",
-#                         sep=""))
-
-temp_png_function(paste("../figures/GSE161529/", 
-                        "Tcga_gse161529_immune_tumor_proportions_patients.png",
+temp_pdf_function(paste("../figures/Wu/With_No_Other/", 
+                        "Tcga_Wu_cell_type_proportions_patients_CID3586.pdf",
                         sep=""))
 print(temp_ggplot)
 dev.off()
+
 
 df <- as_tibble(weight_df_long)
 
@@ -125,10 +164,35 @@ temp_ggplot <- ggplot(df, aes(x = cellType, y = -log(prop), fill = cellType)) +
         plot.title = element_text(hjust = 0.5)) +
   labs(x = "Cell Type", y = "-Log(Cell Proportion)", fill = "Cell Type")
 
-temp_pdf_function(paste("../figures/GSE161529/", 
-                        "Tcga_gse161529_immune_tumor_proportions_patients_violin.pdf",
+temp_pdf_function(paste("../figures/GSE176078/With_No_Other/", 
+                        "Tcga_Wu_cell_type_proportions_patients_CID3586_violin.pdf",
                         sep=""))
-
 print(temp_ggplot)
 dev.off()
+
+
+library(randomForest)
+
+# Define the immune cell proportions for each patient in the training dataset
+train_proportions <- data.frame(
+  patient1 = c(0.1, 0.3, 0.2, 0.15, 0.05, 0.05, 0.03, 0.02),
+  patient2 = c(0.2, 0.2, 0.1, 0.2, 0.05, 0.1, 0.05, 0.1),
+  patient3 = c(0.3, 0.1, 0.05, 0.2, 0.1, 0.05, 0.01, 0.09),
+  patient4 = c(0.15, 0.25, 0.15, 0.1, 0.1, 0.05, 0.02, 0.18),
+  patient5 = c(0.05, 0.2, 0.3, 0.1, 0.1, 0.05, 0.02, 0.18)
+)
+colnames(train_proportions) <- immune.cells
+
+# Define the immune scores for each patient in the training dataset
+train_scores <- c(0.75, 0.6, 0.45, 0.65, 0.35)
+
+# Train a random forest model to predict the immune score based on the immune cell proportions
+rf_model <- randomForest(train_scores ~ ., data = train_proportions)
+
+# Extract the variable importance measures from the random forest model
+var_importance <- importance(rf_model)$MeanDecreaseGini
+
+# Normalize the variable importance measures to obtain the weights
+weights <- var_importance / sum(var_importance)
+
 

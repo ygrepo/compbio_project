@@ -32,7 +32,7 @@ sce2 <- SingleCellExperiment(
 # and cellType information from colData
 rowData(sce2) <- DataFrame(
   Individual = sce$Individual,
-  cellType = sce$cell_subtypes
+  cellType = sce$cell_types
 )
 
 # Aggregate the counts by Individual and cellType
