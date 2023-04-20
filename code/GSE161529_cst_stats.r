@@ -80,12 +80,12 @@ prop_file = paste("../data/brca/tcga/processed/GSE161529/",
 msg <- paste("Reading props from ", prop_file)
 print(msg)
 prop <- readRDS(prop_file)
+prop_weights <- as.data.frame(prop$Est.prop.weighted)
 
-
-prop_est <- as.data.frame(prop$Est.prop.weighted)%>% select(colnames(prop$Est.prop.weighted))
-
-head(prop_est)
-
-print(wilcox.test(as.matrix(normal_df), as.matrix(prop_est)))
+# prop_est <- as.data.frame(prop$Est.prop.weighted)%>% select(colnames(prop$Est.prop.weighted))
+# 
+# head(prop_est)
+# 
+# print(wilcox.test(as.matrix(normal_df), as.matrix(prop_est)))
 
 

@@ -1,24 +1,24 @@
-rm(list = ls())
-
-# The easiest way to get ggplot2 is to install the whole tidyverse:
-#install.packages("tidyverse")
-
-
-# load
-library(SingleCellExperiment)
-library(ggplot2)
-#library(easyGgplot2)
-library(Matrix)
-
-setwd("~/github/compbio_project/code")
-
-prop_file = paste("../data/brca/tcga/processed/GSE176078/ct_minor/", 
-                  "prop_primary_tumor_unstranded_subset_CID3586.rds", 
-                  sep="")
-prop <- readRDS(file=prop_file)
-head(prop$Est.prop.weighted)
-head(prop$r.squared.full)
-head(prop$Var.prop)
+  rm(list = ls())
+  
+  # The easiest way to get ggplot2 is to install the whole tidyverse:
+  #install.packages("tidyverse")
+  
+  
+  # load
+  library(SingleCellExperiment)
+  library(ggplot2)
+  #library(easyGgplot2)
+  library(Matrix)
+  
+  setwd("~/github/compbio_project/code")
+  
+  prop_file = paste("../data/brca/tcga/processed/GSE176078/ct_minor/", 
+                    "prop_primary_tumor_unstranded_subset_CID3586.rds", 
+                    sep="")
+  prop <- readRDS(file=prop_file)
+  head(prop$Est.prop.weighted)
+  head(prop$r.squared.full)
+  head(prop$Var.prop)
 
 # Convert the matrix to a data frame
 weight_df <- as.data.frame(prop$Est.prop.weighted)
