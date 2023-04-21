@@ -9,27 +9,65 @@ setwd("~/github/compbio_project/code")
 
 
 path = paste("../data/brca/tcga/processed/GSE161529/", 
-             "prop_cell_type_tumor_tissue_unstranded.rds", 
+             "prop_cell_type_normal_tissue_unstranded.rds", 
              sep="")
+# path = paste("../data/brca/tcga/processed/GSE161529/", 
+#              "prop_cell_type_tumor_tissue_unstranded.rds", 
+#              sep="")
+
 cell_estimation<- readRDS(path)
 head(cell_estimation)
 
 props <- cell_estimation$Est.prop.weighted
 props <- as.matrix(props)
 
+prop_patients <- unique(rownames(props))
+print(length(prop_patients))
+
+
+# define a function to extract the first three parts
+extract_second_three <- function(input_string) {
+  string_parts <- strsplit(input_string, "-")[[1]]
+  selected_parts <- paste(string_parts[2:3], collapse = "-")
+  return(selected_parts)
+}
+
+
+# apply the function to the list of strings
+prop_patients <- lapply(prop_patients, extract_second_three)
+
+
 tcga_file = paste("../data/brca/tcga/processed/", 
-                  "converted_genes_primary_tumor_unstranded_exp_data.rds", 
+                  "normal_tissue_unstranded.rds", 
                   sep="")
+# tcga_file = paste("../data/brca/tcga/processed/", 
+#                   "converted_genes_primary_tumor_unstranded_exp_data.rds", 
+#                   sep="")
 exprs <-readRDS(tcga_file)
 #exprs <- exprs[,1:2]
 msg <- paste("Tcga exp. dimensions", dim(exprs), sep=":")
 print(msg)
-# 
-# tcga_genes <- toupper(rownames(exprs))
-# rownames(exprs) <- tcga_genes
-# 
-# sce_genes <- toupper(rownames(weights))
-# 
+
+tcga_patients <- unique(toupper(colnames(exprs)))
+print(length(tcga_patients))
+
+tcga_patients <- lapply(tcga_patients, extract_second_three)
+common_patients <- intersect(tcga_patients, prop_patients)
+print(paste0("Found common patients:", length(common_patients)))
+
+colnames(exprs) <-  tcga_patients
+exprs <- exprs[, colnames(exprs) %in% common_patients]
+
+rownames(props) <- prop_patients
+props <- props[rownames(props) %in% common_patients, ]
+print(dim(props))
+unlisted <- unlist(rownames(props))
+props <- props[!(rownames(props) %in% unlisted[duplicated(unlisted)]), ]
+props <- as.matrix(props)
+
+
+#sce_genes <- toupper(rownames(props))
+
 # 
 # markers <- intersect(sce_genes, tcga_genes)
 # msg <- paste("Markers", length(markers), sep=":")
@@ -59,7 +97,7 @@ dim(gene_sce)
 # write_h5ad(AnnData(X=gene_sce), path)
 
 path = paste("../data/brca/tcga/processed/GSE161529/", 
-             "genes_prop_cells_primary_tumor_unstranded.csv", 
+             "genes_prop_cells_normal.csv", 
              sep="")
 write.table(gene_sce, file=path, sep=",")
 #write_h5ad(AnnData(X=gene_sce), path)
