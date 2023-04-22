@@ -8,9 +8,12 @@ library(anndata)
 setwd("~/github/compbio_project/code")
 
 
-path = paste("../data/brca/tcga/processed/GSE161529/", 
-             "prop_cell_type_normal_tissue_unstranded.rds", 
-             sep="")
+# path = paste("../data/brca/tcga/processed/GSE161529/", 
+#              "prop_cell_subtype_normal_tissue.rds", 
+#              sep="")
+path = paste("../data/brca/tcga/processed/GSE161529/",
+                  "prop_cell_subtype_immune_tumor_tissue.rds",                  
+                  sep="")
 # path = paste("../data/brca/tcga/processed/GSE161529/", 
 #              "prop_cell_type_tumor_tissue_unstranded.rds", 
 #              sep="")
@@ -36,13 +39,12 @@ extract_second_three <- function(input_string) {
 # apply the function to the list of strings
 prop_patients <- lapply(prop_patients, extract_second_three)
 
-
-tcga_file = paste("../data/brca/tcga/processed/", 
-                  "normal_tissue_unstranded.rds", 
-                  sep="")
 # tcga_file = paste("../data/brca/tcga/processed/", 
-#                   "converted_genes_primary_tumor_unstranded_exp_data.rds", 
+#                   "converted_genes_normal_tissue_unstranded_exp_data.rds", 
 #                   sep="")
+tcga_file = paste("../data/brca/tcga/processed/",
+                  "converted_genes_primary_tumor_unstranded_exp_data.rds",
+                  sep="")
 exprs <-readRDS(tcga_file)
 #exprs <- exprs[,1:2]
 msg <- paste("Tcga exp. dimensions", dim(exprs), sep=":")
@@ -61,8 +63,8 @@ exprs <- exprs[, colnames(exprs) %in% common_patients]
 rownames(props) <- prop_patients
 props <- props[rownames(props) %in% common_patients, ]
 print(dim(props))
-unlisted <- unlist(rownames(props))
-props <- props[!(rownames(props) %in% unlisted[duplicated(unlisted)]), ]
+# unlisted <- unlist(rownames(props))
+# props <- props[!(rownames(props) %in% unlisted[duplicated(unlisted)]), ]
 props <- as.matrix(props)
 
 
@@ -96,14 +98,14 @@ dim(gene_sce)
 #              sep="")
 # write_h5ad(AnnData(X=gene_sce), path)
 
-path = paste("../data/brca/tcga/processed/GSE161529/", 
-             "genes_prop_cells_normal.csv", 
+path = paste("../data/brca/tcga/processed/GSE161529/",
+             "genes_prop_subtypes_cells_tumor.csv",
              sep="")
 write.table(gene_sce, file=path, sep=",")
-#write_h5ad(AnnData(X=gene_sce), path)
-
-# Run PROGENy to predict the activity of transcription factors (TFs)
-progeny_results <- progeny(gene_sce, organism="Human")
+# #write_h5ad(AnnData(X=gene_sce), path)
+# 
+# # Run PROGENy to predict the activity of transcription factors (TFs)
+# progeny_results <- progeny(gene_sce, organism="Human")
 
 
 

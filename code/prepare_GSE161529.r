@@ -144,7 +144,6 @@ sce_file = paste("../data/brca/GSE161529/processed/",
 saveRDS(sce, file=sce_file)
 
 # Filter the SingleCellExperiment object based on a metadata column
-filter_values <- c("Immune")
 immune_sce <- subset(sce, ,colData(sce)$cell_types == 'Immune')
 sce_file = paste("../data/brca/GSE161529/processed/", 
                  "tumor_immune_sce.rds", 
