@@ -67,6 +67,15 @@ temp_pdf_function <-
     )
   }
 
+temp_png_function <-
+  function(x) {
+    png(
+      file = (x),
+      width = 900, height = 480, units = "px", pointsize = 12,
+      bg = "white", 
+    )
+  }
+
 immune.cells <- c("B cells Memory",
                   "B cells Naive",
                   "T cells CD8+",
@@ -108,8 +117,8 @@ temp_ggplot <- ggplot(data = count_by_individual, aes(x = Individual, y = prop, 
   scale_fill_manual(values = as.vector(temp_colour_pal_2$colour)) 
 #  theme_classic()
 
-temp_pdf_function(paste("../figures/With_No_Other/", 
-                        "Wu_cell_type_proportions_patients.pdf",
+temp_png_function(paste("../figures/GSE176078/With_No_Other/", 
+                        "Wu_cell_type_proportions_patients.png",
                         sep=""))
 print(temp_ggplot)
 dev.off()

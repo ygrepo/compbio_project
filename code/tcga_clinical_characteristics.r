@@ -1,12 +1,5 @@
 rm(list = ls())
 
-# library(cBioPortalData)
-# library(survival)
-# library(lubridate)
-# library(ggsurvfit)
-# library(gtsummary)
-# library(tidycmprsk)
-# library(condsurv)
 library(dplyr)
 library(tibble)
 library(Hmisc)
